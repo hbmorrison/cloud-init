@@ -17,3 +17,4 @@ runcmd:
   - apt-get install -y docker-ce docker-ce-cli docker-compose-plugin containerd.io
   - systemctl start docker
   - systemctl enable docker
+  - usermod -aG docker hannah
