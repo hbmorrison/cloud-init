@@ -10,7 +10,6 @@ users:
     groups: admin, sudo, users
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
-ssh_pwauth: true
 packages:
   - apt-transport-https
   - ca-certificates
@@ -24,6 +23,9 @@ runcmd:
 
   - ufw allow 22
   - ufw enable
+  - sed -i -e '/^\(#\|\)PubkeyAuthentication/s/^.*$/PubkeyAuthentication yes/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)PasswordAuthentication/s/^.*$/PasswordAuthentication yes/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh\/authorized_keys/' /etc/ssh/sshd_config
 
   # Done.
   - reboot
