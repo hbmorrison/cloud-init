@@ -10,11 +10,7 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
 packages:
-  - apt-transport-https
-  - ca-certificates
-  - curl
   - git
-  - software-properties-common
   - ufw
 chpasswd:
   expire: false
@@ -24,7 +20,7 @@ runcmd:
   - ufw allow 227
   - ufw enable
   - sed -i -e '/^\(#\|\)PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)PasswordAuthentication/s/^.*$/PasswordAuthentication yes/' /etc/ssh/sshd_config
+  - sed -i -e '/^\(#\|\)PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
   - sed -i -e '/^\(#\|\)Port/s/^.*$/Port 227/' /etc/ssh/sshd_config
   - sed -i -e '/^\(#\|\)KbdInteractiveAuthentication/s/^.*$/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
   - sed -i -e '/^\(#\|\)ChallengeResponseAuthentication/s/^.*$/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
@@ -35,15 +31,13 @@ runcmd:
   - sed -i -e '/^\(#\|\)AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh\/authorized_keys/' /etc/ssh/sshd_config
   - sed -i '$a AllowUsers hannah' /etc/ssh/sshd_config
   - reboot
-
 write_files:
-
   # Script to install dot files.
   - path: /usr/local/bin/dot
     permissions: '0755'
     content: |
+      #!/bin/sh
       su -c "git clone https://github.com/hbmorrison/dot.git .dot" - hannah
       su -c ".dot/update.sh" - hannah
-
 scripts-user:
   - /usr/local/bin/dot
