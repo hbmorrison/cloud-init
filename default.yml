@@ -5,7 +5,7 @@ users:
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
     ssh_authorized_keys:
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDBSQnrJWPNMppOgRMcyuPy7uhkbwy7cBs3KM3Znt0PN hannah@duet5
+      - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDBSQnrJWPNMppOgRMcyuPy7uhkbwy7cBs3KM3Znt0PN hannah@duet5"
 packages:
   - apt-transport-https
   - ca-certificates
