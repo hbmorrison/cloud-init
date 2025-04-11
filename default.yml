@@ -1,8 +1,12 @@
 #cloud-config
 users:
   - name: hannah
-    groups: users, admin
+    password: "$6$nzbG/B5BO/4YEyqe$fBKWA.re7VStxVf7ATCLkLIJ2zN2YB56NiJ1S/hP64qXTL.Vaqvei6Xv0/mludhviwz5ymibg.mD70BDTjvxo1"
+    lock-passwd: false
+    ssh_pwauth: True
+    chpasswd: { expire: False }
     sudo: ALL=(ALL) NOPASSWD:ALL
+    groups: users, admin
     shell: /bin/bash
     ssh_authorized_keys:
       - "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDBSQnrJWPNMppOgRMcyuPy7uhkbwy7cBs3KM3Znt0PN hannah@duet5"
@@ -20,15 +24,6 @@ runcmd:
   # Harden ssh.
   - ufw allow 227
   - ufw enable
-  - sed -i -e '/^\(#\|\)PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)Port/s/^.*$/Port 227/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)KbdInteractiveAuthentication/s/^.*$/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)ChallengeResponseAuthentication/s/^.*$/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)AllowTcpForwarding/s/^.*$/AllowTcpForwarding no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)X11Forwarding/s/^.*$/X11Forwarding no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)AllowAgentForwarding/s/^.*$/AllowAgentForwarding no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh\/authorized_keys/' /etc/ssh/sshd_config
-  - sed -i '$a AllowUsers hannah' /etc/ssh/sshd_config
 
   # Done.
   - reboot
