@@ -1,6 +1,6 @@
 # My cloud-init files
 
-## Main
+## Production
 
 ### Default
 
@@ -17,7 +17,7 @@ https://raw.githubusercontent.com/hbmorrison/cloud-init/refs/heads/main/default.
 https://raw.githubusercontent.com/hbmorrison/cloud-init/refs/heads/main/docker.yml
 ```
 
-## Develop
+## Development
 
 ### Default
 
