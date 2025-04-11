@@ -3,8 +3,6 @@ users:
   - name: hannah
     passwd: $6$nzbG/B5BO/4YEyqe$fBKWA.re7VStxVf7ATCLkLIJ2zN2YB56NiJ1S/hP64qXTL.Vaqvei6Xv0/mludhviwz5ymibg.mD70BDTjvxo1
     lock_passwd: false
-    chpasswd:
-      expire: false
     ssh_authorized_keys:
       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDBSQnrJWPNMppOgRMcyuPy7uhkbwy7cBs3KM3Znt0PN hannah@duet5
     groups: admin, sudo, users
@@ -17,6 +15,8 @@ packages:
   - git
   - software-properties-common
   - ufw
+chpasswd:
+  expire: false
 package_update: true
 package_upgrade: true
 runcmd:
