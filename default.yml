@@ -4,14 +4,15 @@ merge_how:
    settings: [append]
  - name: dict
    settings: [no_replace, recurse_list]
+timezone: Europe/London
+locale: en_GB.utf8
 package_update: true
 package_upgrade: true
+package_reboot_if_required: true
 packages:
   - fail2ban
   - git
   - ufw
-timezone: Europe/London
-locale: en_GB.utf8
 users:
   - name: hannah
     ssh_authorized_keys:
@@ -37,6 +38,6 @@ runcmd:
   - sed -i -e '/^\(#\|\)AllowAgentForwarding/s/^.*$/AllowAgentForwarding no/' /etc/ssh/sshd_config
   - sed -i -e '/^\(#\|\)AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh\/authorized_keys/' /etc/ssh/sshd_config
   - sed -i '$a AllowUsers hannah' /etc/ssh/sshd_config
+  - systemctl restart sshd
   - su -c "git clone https://github.com/hbmorrison/dot.git .dotfiles" - hannah
   - su -c ".dotfiles/update.sh" - hannah
-  - reboot
