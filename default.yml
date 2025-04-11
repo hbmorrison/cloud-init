@@ -33,14 +33,13 @@ runcmd:
   - sed -i -e '/^\(#\|\)AllowAgentForwarding/s/^.*$/AllowAgentForwarding no/' /etc/ssh/sshd_config
   - sed -i -e '/^\(#\|\)AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh\/authorized_keys/' /etc/ssh/sshd_config
   - sed -i '$a AllowUsers hannah' /etc/ssh/sshd_config
+  - sh /usr/local/bin/hannah_dotfiles
   - reboot
 write_files:
   # Script to install dot files.
-  - path: /usr/local/bin/dot
+  - path: /usr/local/bin/hannah_dotfiles
     permissions: '0755'
     content: |
       #!/bin/sh
-      su -c "git clone https://github.com/hbmorrison/dot.git .dot" - hannah
-      su -c ".dot/update.sh" - hannah
-scripts-user:
-  - /usr/local/bin/dot
+      su -c "git clone https://github.com/hbmorrison/dot.git .dotfiles" - hannah
+      su -c ".dotfiles/update.sh" - hannah
