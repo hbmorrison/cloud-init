@@ -1,4 +1,4 @@
-# cloud-init
+#cloud-config
 users:
   - name: hannah
     groups: users, admin
