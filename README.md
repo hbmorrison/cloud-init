@@ -12,5 +12,6 @@ https://raw.githubusercontent.com/hbmorrison/cloud-init/refs/heads/main/default.
 ```
 #include
 https://raw.githubusercontent.com/hbmorrison/cloud-init/refs/heads/main/default.yml
+https://raw.githubusercontent.com/hbmorrison/cloud-init/refs/heads/main/docker.yml
 ```
 
