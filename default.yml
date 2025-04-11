@@ -1,30 +1,35 @@
 #cloud-config
+merge_how:
+ - name: list
+   settings: [append]
+ - name: dict
+   settings: [no_replace, recurse_list]
+timezone: Europe/London
+locale: en_GB.utf8
+package_update: true
+package_upgrade: true
+package_reboot_if_required: true
+packages:
+  - fail2ban
+  - git
+  - ufw
 users:
   - name: hannah
-    passwd: $6$nzbG/B5BO/4YEyqe$fBKWA.re7VStxVf7ATCLkLIJ2zN2YB56NiJ1S/hP64qXTL.Vaqvei6Xv0/mludhviwz5ymibg.mD70BDTjvxo1
-    lock_passwd: false
     ssh_authorized_keys:
       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDBSQnrJWPNMppOgRMcyuPy7uhkbwy7cBs3KM3Znt0PN
       - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDTncmBgMElokc+w0910ZdGGE7cmytZoAcXfO3eKNiUR
     groups: admin, sudo, users
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
-packages:
-  - fail2ban
-  - git
-  - ufw
 chpasswd:
   expire: false
-package_update: true
-package_upgrade: true
 runcmd:
   - printf "[sshd]\nenabled = true\nbanaction = iptables-multiport" > /etc/fail2ban/jail.local
   - systemctl enable fail2ban
-  - ufw allow 227
+  - ufw allow 22
   - ufw enable
   - sed -i -e '/^\(#\|\)PermitRootLogin/s/^.*$/PermitRootLogin no/' /etc/ssh/sshd_config
   - sed -i -e '/^\(#\|\)PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
-  - sed -i -e '/^\(#\|\)Port/s/^.*$/Port 227/' /etc/ssh/sshd_config
   - sed -i -e '/^\(#\|\)KbdInteractiveAuthentication/s/^.*$/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
   - sed -i -e '/^\(#\|\)ChallengeResponseAuthentication/s/^.*$/ChallengeResponseAuthentication no/' /etc/ssh/sshd_config
   - sed -i -e '/^\(#\|\)MaxAuthTries/s/^.*$/MaxAuthTries 2/' /etc/ssh/sshd_config
@@ -33,14 +38,6 @@ runcmd:
   - sed -i -e '/^\(#\|\)AllowAgentForwarding/s/^.*$/AllowAgentForwarding no/' /etc/ssh/sshd_config
   - sed -i -e '/^\(#\|\)AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh\/authorized_keys/' /etc/ssh/sshd_config
   - sed -i '$a AllowUsers hannah' /etc/ssh/sshd_config
-  - reboot
-write_files:
-  # Script to install dot files.
-  - path: /usr/local/bin/dot
-    permissions: '0755'
-    content: |
-      #!/bin/sh
-      su -c "git clone https://github.com/hbmorrison/dot.git .dot" - hannah
-      su -c ".dot/update.sh" - hannah
-scripts-user:
-  - /usr/local/bin/dot
+  - systemctl restart sshd
+  - su -c "git clone https://github.com/hbmorrison/dot.git .dotfiles" - hannah
+  - su -c ".dotfiles/update.sh" - hannah
