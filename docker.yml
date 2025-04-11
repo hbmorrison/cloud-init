@@ -49,13 +49,12 @@ runcmd:
 
 write_files:
 
-  # Script to install dot files.
-  - content: |
-      #!/bin/bash
+  # Install dot files.
+  - path: /usr/local/bin/dot
+    permissions: '0755'
+    content: |
       su -c "git clone https://github.com/hbmorrison/dot.git .dot" - hannah
       su -c ".dot/update.sh" - hannah
-    path: /usr/local/bin/dot
-    permissions: '0755'
 
 scripts-user:
   - /usr/local/bin/dot
