@@ -39,5 +39,5 @@ runcmd:
   - sed -i -e '/^\(#\|\)AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh\/authorized_keys/' /etc/ssh/sshd_config
   - sed -i '$a AllowUsers hannah' /etc/ssh/sshd_config
   - systemctl restart sshd
-  - su -c "git clone https://github.com/hbmorrison/dot.git .dotfiles" - hannah
-  - su -c ".dotfiles/update.sh" - hannah
+  - su -c "git clone https://github.com/hbmorrison/dotfiles.git .dotfiles" - hannah
+  - su -c ".dotfiles/bin/update.sh" - hannah
