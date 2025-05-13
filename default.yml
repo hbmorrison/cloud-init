@@ -57,7 +57,7 @@ runcmd:
   - sed -i '$a AllowUsers root hannah' /etc/ssh/sshd_config
   - systemctl restart sshd
   - curl -fsSL https://tailscale.com/install.sh | sh
-  - git clone https://github.com/hbmorrison/dotfiles.git dotfiles
-  - dotfiles/bin/update.sh
+  - git clone https://github.com/hbmorrison/dotfiles.git /root/dotfiles
+  - /root/dotfiles/bin/shell.sh
   - su -c "git clone https://github.com/hbmorrison/dotfiles.git dotfiles" - hannah
-  - su -c "dotfiles/bin/update.sh" - hannah
+  - su -c "dotfiles/bin/shell.sh" - hannah
