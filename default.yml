@@ -10,11 +10,24 @@ package_update: true
 package_upgrade: true
 package_reboot_if_required: true
 packages:
+  - bash-completion
   - curl
   - fail2ban
   - git
+  - git-flow
+  - gpg
+  - vim
+  - wget
+  - zip
+  - bind9-dnsutils
+  - inetutils-traceroute
+  - lsof
+  - ncat
+  - nmap
+  - socat
   - ufw
   - vim
+  - whois
 users:
   - name: hannah
     ssh_authorized_keys:
