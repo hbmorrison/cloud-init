@@ -10,14 +10,17 @@ package_update: true
 package_upgrade: true
 package_reboot_if_required: true
 packages:
+  - curl
   - fail2ban
   - git
   - ufw
+  - vim
 users:
   - name: hannah
     ssh_authorized_keys:
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDBSQnrJWPNMppOgRMcyuPy7uhkbwy7cBs3KM3Znt0PN
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDTncmBgMElokc+w0910ZdGGE7cmytZoAcXfO3eKNiUR
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFQrMFUWwWVERyOMHeeAfCmFYuy0CJLdmQZvgvSIrjF hannah@smout
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDBSQnrJWPNMppOgRMcyuPy7uhkbwy7cBs3KM3Znt0PN hannah@penguin
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDTncmBgMElokc+w0910ZdGGE7cmytZoAcXfO3eKNiUR hmorris@worklaptop
     groups: sudo, users
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
@@ -27,6 +30,7 @@ runcmd:
   - printf "[sshd]\nenabled = true\nbanaction = iptables-multiport" > /etc/fail2ban/jail.local
   - systemctl enable fail2ban
   - ufw allow 22
+  - ufw allow 41641/udp
   - ufw enable
   - sed -i -e '/^\(#\|\)PermitRootLogin/s/^.*$/PermitRootLogin without-password/' /etc/ssh/sshd_config
   - sed -i -e '/^\(#\|\)PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
@@ -39,5 +43,8 @@ runcmd:
   - sed -i -e '/^\(#\|\)AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh\/authorized_keys/' /etc/ssh/sshd_config
   - sed -i '$a AllowUsers root hannah' /etc/ssh/sshd_config
   - systemctl restart sshd
-  - su -c "git clone https://github.com/hbmorrison/dotfiles.git .dotfiles" - hannah
-  - su -c ".dotfiles/bin/update.sh" - hannah
+  - curl -fsSL https://tailscale.com/install.sh | sh
+  - git clone https://github.com/hbmorrison/dotfiles.git dotfiles
+  - dotfiles/bin/update.sh
+  - su -c "git clone https://github.com/hbmorrison/dotfiles.git dotfiles" - hannah
+  - su -c "dotfiles/bin/update.sh" - hannah
