@@ -10,15 +10,32 @@ package_update: true
 package_upgrade: true
 package_reboot_if_required: true
 packages:
+  - bash-completion
+  - curl
   - fail2ban
   - git
   - python3-systemd
+  - git-flow
+  - gpg
+  - vim
+  - wget
+  - zip
+  - bind9-dnsutils
+  - inetutils-traceroute
+  - lsof
+  - ncat
+  - nmap
+  - socat
   - ufw
+  - vim
+  - whois
 users:
   - name: hannah
     ssh_authorized_keys:
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDBSQnrJWPNMppOgRMcyuPy7uhkbwy7cBs3KM3Znt0PN
-      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDTncmBgMElokc+w0910ZdGGE7cmytZoAcXfO3eKNiUR
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKFQrMFUWwWVERyOMHeeAfCmFYuy0CJLdmQZvgvSIrjF hannah@smout
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDBSQnrJWPNMppOgRMcyuPy7uhkbwy7cBs3KM3Znt0PN hannah@penguin
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDTncmBgMElokc+w0910ZdGGE7cmytZoAcXfO3eKNiUR hmorris@worklaptop
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIB9wqScftMAk/x1bn4mwWFt2IxqxI8IZAUfKntBbtnpV hmorris@is-apps-1129
     groups: sudo, users
     sudo: ALL=(ALL) NOPASSWD:ALL
     shell: /bin/bash
@@ -51,5 +68,8 @@ runcmd:
   - sed -i -e '/^\(#\|\)AuthorizedKeysFile/s/^.*$/AuthorizedKeysFile .ssh\/authorized_keys/' /etc/ssh/sshd_config
   - sed -i '$a AllowUsers root hannah' /etc/ssh/sshd_config
   - systemctl restart sshd
+  - curl -fsSL https://tailscale.com/install.sh | sh
+  - git clone https://github.com/hbmorrison/dotfiles.git /root/.dotfiles
+  - /root/.dotfiles/bin/dotfiles.sh
   - su -c "git clone https://github.com/hbmorrison/dotfiles.git .dotfiles" - hannah
-  - su -c ".dotfiles/bin/update.sh" - hannah
+  - su -c ".dotfiles/bin/dotfiles.sh" - hannah
