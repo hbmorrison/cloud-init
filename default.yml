@@ -15,20 +15,9 @@ packages:
   - fail2ban
   - git
   - python3-systemd
-  - git-flow
-  - gpg
+  - sudo
   - vim
-  - wget
-  - zip
-  - bind9-dnsutils
-  - inetutils-traceroute
-  - lsof
-  - ncat
-  - nmap
-  - socat
   - ufw
-  - vim
-  - whois
 users:
   - name: hannah
     ssh_authorized_keys:
