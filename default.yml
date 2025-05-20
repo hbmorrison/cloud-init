@@ -12,6 +12,7 @@ package_reboot_if_required: true
 packages:
   - fail2ban
   - git
+  - python3-systemd
   - ufw
 users:
   - name: hannah
@@ -24,10 +25,21 @@ users:
 chpasswd:
   expire: false
 runcmd:
-  - printf "[sshd]\nenabled = true\nbanaction = iptables-multiport" > /etc/fail2ban/jail.local
+  - printf "[DEFAULT]\nallowipv6 = auto\n" > /etc/fail2ban/fail2ban.local
+  - printf "logtarget = SYSTEMD-JOURNAL\ndbpurgeage = 29d\n" >> /etc/fail2ban/fail2ban.local
+  - printf "[DEFAULT]\nbackend = systemd\n" > /etc/fail2ban/jail.local
+  - printf "banaction = nftables-multiport\n" > /etc/fail2ban/jail.local
+  - printf "chain = input\n" > /etc/fail2ban/jail.local
+  - printf "ignoreip = 127.0.0.1/8 ::1/128 100.64.0.0/10 fd7a:115c:a1e0::/48\n" >> /etc/fail2ban/jail.local
+  - printf "bantime = 937\nfindtime = 613\nmaxretry = 3\n" >> /etc/fail2ban/jail.local
+  - printf "bantime.increment = true\nbantime.factor = 2\n" >> /etc/fail2ban/jail.local
+  - printf "bantime.rndtime = 311\nbantime.maxtime = 24h\n\n" >> /etc/fail2ban/jail.local
+  - printf "[sshd]\nenabled = true\nmode = aggressive\n" >> /etc/fail2ban/jail.local
   - systemctl enable fail2ban
-  - ufw allow 22
-  - ufw enable
+  - systemctl restart fail2ban
+  - ufw allow 22/tcp
+  - ufw allow 41641/udp
+  - ufw --force enable
   - sed -i -e '/^\(#\|\)PermitRootLogin/s/^.*$/PermitRootLogin without-password/' /etc/ssh/sshd_config
   - sed -i -e '/^\(#\|\)PasswordAuthentication/s/^.*$/PasswordAuthentication no/' /etc/ssh/sshd_config
   - sed -i -e '/^\(#\|\)KbdInteractiveAuthentication/s/^.*$/KbdInteractiveAuthentication no/' /etc/ssh/sshd_config
